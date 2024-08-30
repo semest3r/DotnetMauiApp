@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DotnetMauiApp.ViewModels"
+             xmlns:model="clr-namespace:DotnetMauiApp.Models"
+             x:Class="DotnetMauiApp.Views.TransaksiPage"
+             x:DataType="viewmodel:TransaksiViewModel"
+             Title="TransaksiPage"
+             >
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="8">
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+                <BoxView BackgroundColor="{StaticResource PrimaryDark}"/>
+                <VerticalStackLayout Padding="16">
+                    <Label Text="Pemasukan" FontSize="16"
+                       HorizontalOptions="Center"/>
+                    <Label Text="Rp. 500.000"
+                       HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <BoxView BackgroundColor="{StaticResource PrimaryDark}"
+                     Grid.Column="1" />
+                <VerticalStackLayout Grid.Column="1"
+                                     Padding="16">
+                    <Label Text="Pengeluaran" 
+                           FontSize="16"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Rp. 100.000" 
+                       HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+            <Grid ColumnDefinitions="*,*">
+                <HorizontalStackLayout HorizontalOptions="Center" 
+                                       VerticalOptions="Center">
+                    <Label VerticalOptions="Center" Text="From" />
+                <DatePicker />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1"
+                                       HorizontalOptions="Center" 
+                                       VerticalOptions="Center">
+                <Label VerticalOptions="Center" Text="To" />
+                <DatePicker Grid.Column="1" />
+                </HorizontalStackLayout>
+            </Grid>
+            <Label Text="Beberapa Transaksi Terbaru" />
+            <Grid ColumnDefinitions="150,50,*,100">
+                <Label  Text="Deskripsi" />
+                <Label Grid.Column="1" Text="" />
+                <Label Grid.Column="2" Text="Jumlah" />
+                <Label Grid.Column="3" Text="Waktu/Tanggal" />
+            </Grid>
+            <CollectionView ItemsSource="{Binding TransaksiSource}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type model:Transaksi}">
+                        <Grid ColumnDefinitions="150,50,*,100">
+                            <Label  Text="{Binding Description}" />
+                            <Label Grid.Column="1" Text="{Binding TipeTransaksi}" />
+                            <Label Grid.Column="2" Text="{Binding JumlahUang}" />
+                            <Label Grid.Column="3" Text="{Binding CreatedAt}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

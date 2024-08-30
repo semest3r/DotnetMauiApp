@@ -4,37 +4,19 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:DotnetMauiApp.Views"
-    Shell.FlyoutBehavior="Flyout"
     Title="DotnetMauiApp"
     BackgroundColor="{StaticResource Primary}"
    >
-    <FlyoutItem Title="Flyout One">
-        <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:MainPage}"
-        Route="MainPage" />
-    </FlyoutItem>
-    <FlyoutItem Title="Flyout Two">
-        <Tab Title="Product">
-            <ShellContent 
-            Title="Product"
-            ContentTemplate="{DataTemplate views:ProductPage}"
-            Route="ProductPage"
-            />
-        </Tab>
-        <Tab Title="Category">
-            <ShellContent 
-            Title="Category"
-            ContentTemplate="{DataTemplate views:CategoryPage}"
-            Route="CategoryPage"
-            />
-        </Tab>
-        <Tab Title="Settings">
-            <ShellContent 
-            Title="Category"
-            ContentTemplate="{DataTemplate views:CategoryPage}"
-            Route="CategoryPage"
-            />
-        </Tab>
-    </FlyoutItem>
+    <TabBar>
+        <ShellContent Title="Home"
+                      Icon="icon_home.png"
+                      ContentTemplate="{DataTemplate views:MainPage}" />
+        <ShellContent Title="Search"
+                      Icon="icon_search.png"
+                      ContentTemplate="{DataTemplate views:TransaksiPage}" />
+        <ShellContent Title="Setting"
+                      Icon="icon_setting.png"
+                      ContentTemplate="{DataTemplate views:SettingsPage}" />
+    </TabBar>
+
 </Shell>

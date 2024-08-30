@@ -4,15 +4,14 @@
              x:Class="DotnetMauiApp.Views.ProductPage"
              Title="Products">
     <ScrollView HorizontalScrollBarVisibility="Always">
-        <StackLayout Orientation="Horizontal" Spacing="100">
-            <HorizontalStackLayout Spacing="10">
-                <Rectangle Fill="Blue" HeightRequest="80" WidthRequest="80"/>
-                <VerticalStackLayout VerticalOptions="Center">
-                    <Label FontSize="18" FontAttributes="Bold">Ngoding</Label>
-                    <Label FontSize="14">Jancoook</Label>
-                </VerticalStackLayout>
-            </HorizontalStackLayout>
-
-        </StackLayout>
+        <VerticalStackLayout Spacing="10">
+            <Label Text="Tambah Produk"/>
+            <Entry x:Name="TextEditor"
+                Text="{Binding Text}" Placeholder="Masukkan Nama Produk"/>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Button Text="Save" Clicked="SaveButton_Clicked" />
+                <Button Text="Delete" Clicked="DeleteButton_Clicked" />
+            </Grid>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

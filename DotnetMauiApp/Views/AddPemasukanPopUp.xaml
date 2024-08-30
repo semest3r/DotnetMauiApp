@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewmodel="clr-namespace:DotnetMauiApp.ViewModels"
+    x:Class="DotnetMauiApp.Views.AddPemasukanPopUp"
+    x:DataType="viewmodel:TransaksiViewModel"
+    CanBeDismissedByTappingOutsideOfPopup="True">
+    <VerticalStackLayout Padding="16" Spacing="16" WidthRequest="300">
+        <VerticalStackLayout Spacing="8">
+            <Label Text="Deskripsi"/>
+            <Entry Text="{Binding Deskripsi}" Placeholder="Deskripsi..." PlaceholderColor="{StaticResource Primary}"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Spacing="8">
+            <Label Text="Pemasukan"/>
+            <Entry Text="{Binding JumlahUang}" Keyboard="Numeric" Placeholder="Jumlah uang" PlaceholderColor="{StaticResource Primary}" />
+        </VerticalStackLayout>
+        <Button Text="Submit" Command="{Binding AddPemasukanCommand}" Clicked="Close_Clicked"/> 
+    </VerticalStackLayout>
+</toolkit:Popup>

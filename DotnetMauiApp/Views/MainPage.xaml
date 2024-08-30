@@ -1,31 +1,60 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DotnetMauiApp.Views.MainPage">
-
+             xmlns:viewmodel="clr-namespace:DotnetMauiApp.ViewModels"
+             xmlns:model="clr-namespace:DotnetMauiApp.Models"
+             x:Class="DotnetMauiApp.Views.MainPage"
+             x:DataType="viewmodel:TransaksiViewModel"
+             >
     <ScrollView>
         <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a race car number eight" />
-
+            Padding="16"
+            Spacing="16">
+            <Label Text="{Binding LokasiFileSystem}"/>
             <Label
-                Text="Hello, World!"
+                HorizontalOptions="Start"
+                Text="Achmad NurFaizy"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1" />
-
-            <Label
-                Text="Welcome to &#10;.NET Multi-platform App UI"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
-
-           
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Dompetku Saat Ini"/>
+                <Label Text="Rp. 400.000" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+            </VerticalStackLayout>
+            <Grid ColumnSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Text="Pemasukan" 
+                        Clicked="Pemasukan_Clicked"/>
+                <Button Grid.Column="1"
+                        Text="Penarikan"
+                        Clicked="Pengeluaran_Clicked"/>
+            </Grid>
+            <Label Text="Beberapa Transaksi Terbaru" />
+            <Grid ColumnDefinitions="150,50,*,100">
+                <Label  Text="Deskripsi" />
+                <Label Grid.Column="1" Text="" />
+                <Label Grid.Column="2" Text="Jumlah" />
+                <Label Grid.Column="3" Text="Waktu/Tanggal" />
+            </Grid>
+            <CollectionView ItemsSource="{Binding RecentTransaksiSource}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type model:Transaksi}">
+                        <Grid ColumnDefinitions="150,50,*,100">
+                            <Label  Text="{Binding Description}" />
+                            <Label Grid.Column="1" Text="{Binding TipeTransaksi}" />
+                            <Label Grid.Column="2" Text="{Binding JumlahUang}" />
+                            <Label Grid.Column="3" Text="{Binding CreatedAt}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
+
     </ScrollView>
 
 </ContentPage>
