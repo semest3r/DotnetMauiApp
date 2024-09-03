@@ -1,11 +1,7 @@
 ﻿using DotnetMauiApp.Data;
 using DotnetMauiApp.Models;
 using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DotnetMauiApp.Repositories
 {
@@ -30,25 +26,54 @@ namespace DotnetMauiApp.Repositories
             return result;
         }
 
-        public async Task<List<Transaksi>> GetAll()
+        public async Task<List<Transaksi>> GetAll(int walletId, DateTime dateFrom, DateTime dateTo)
         {
             await Init();
-            List<Transaksi> list = await conn.Table<Transaksi>().ToListAsync();
+            List<Transaksi> list = await conn.Table<Transaksi>()
+                .Where(x => x.WalletId == walletId && x.CreatedAt >= dateFrom && x.CreatedAt <= dateTo)
+                .ToListAsync();
             return list;
         }
 
-        public async Task<List<Transaksi>> GetRecentTransaksi()
+        public async Task<List<Transaksi>> GetRecentTransaksi(int WalletId)
         {
             await Init();
-            List<Transaksi> list = await conn.Table<Transaksi>().Take(10).OrderBy(x => x.Id).ToListAsync();
+            List<Transaksi> list = await conn.Table<Transaksi>()
+                .Take(10)
+                .Where(x=> x.WalletId == WalletId)
+                .OrderBy(x => x.Id)
+                .ToListAsync();
             return list;
         }
 
         public async Task<Transaksi> GetById(int id)
         {
             await Init();
-            var transaksi = await conn.Table<Transaksi>().FirstOrDefaultAsync(x => x.Id == id);
+            var transaksi = await conn.Table<Transaksi>()
+                .FirstOrDefaultAsync(x => x.Id == id);
             return transaksi;
+        }
+
+        public async Task<double> GetTotalPemasukan(int walletId)
+        {
+            var transaksi = await conn.QueryAsync<Transaksi>("SELECT SUM(transaksi.JumlahUang) AS TotalUang FROM transaksi WHERE transaksi.WalletId == ? AND transaksi.TipeTransaksi == 'In' GROUP BY transaksi.TipeTransaksi", walletId);
+            if (transaksi.Count < 1)
+            {
+                return 0;
+            }
+            var result = transaksi[0];
+            return result.TotalUang;
+        }
+
+        public async Task<double> GetTotalPengeluaran(int walletId)
+        {
+            var transaksi = await conn.QueryAsync<Transaksi>("SELECT SUM(transaksi.JumlahUang) AS TotalUang FROM transaksi WHERE transaksi.WalletId == ? transaksi.TipeTransaksi == 'Out' GROUP BY transaksi.TipeTransaksi", walletId);
+            if( transaksi.Count < 1)
+            {
+                return 0;
+            }
+            var result = transaksi[0];
+            return result.TotalUang;
         }
 
         public async Task<int> UpdateTransaksi(Transaksi transaksi)

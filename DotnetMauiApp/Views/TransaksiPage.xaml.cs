@@ -4,10 +4,10 @@ namespace DotnetMauiApp.Views;
 
 public partial class TransaksiPage : ContentPage
 {
-	public TransaksiPage(TransaksiViewModel transaksiViewModel)
+	public TransaksiPage(TransaksiViewModel vm)
 	{
 		InitializeComponent();
-		BindingContext = transaksiViewModel;
-		transaksiViewModel.TransaksiAll();
-	}
+		BindingContext = vm;
+        SentrySdk.CaptureMessage("Hello Sentry");
+    }
 }

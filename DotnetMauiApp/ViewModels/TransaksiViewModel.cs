@@ -2,37 +2,82 @@
 using CommunityToolkit.Mvvm.Input;
 using DotnetMauiApp.Models;
 using DotnetMauiApp.Repositories;
+using DotnetMauiApp.Services;
 using System.Collections.ObjectModel;
 
 namespace DotnetMauiApp.ViewModels
 {
-    public partial class TransaksiViewModel: ObservableObject
+    public partial class TransaksiViewModel: BaseViewModel
     {
         private readonly TransaksiRepository _transaksiRepository;
-        public TransaksiViewModel(TransaksiRepository transaksiRepository)
+        public TransaksiViewModel(AuthService authService, TransaksiRepository transaksiRepository) : base(authService) 
         {
             _transaksiRepository = transaksiRepository;
-            TransaksiSource = [];
-            RecentTransaksiSource = [];
             LokasiFileSystem = Path.Combine(FileSystem.AppDataDirectory);
+            TransaksiSource = [];
+            DateTime date = DateTime.UtcNow;
+            DateFrom = new DateTime(date.Year, date.Month, 1);
+            DateTo = DateTime.UtcNow;
+            TransaksiAll();
+            GetTotalPemasukan();
         }
-        public async void TransaksiAll()
+
+        public async Task TransaksiAll()
         {
-            var transaksiAll = await _transaksiRepository.GetAll();
+            var walletId = await _authService.GetCurrentWalletId();
+            var transaksiAll = await _transaksiRepository.GetAll(walletId, DateFrom, DateTo);
             TransaksiSource.Clear();
             foreach(var item in transaksiAll)
             {
                 TransaksiSource.Add(item);
             }
         }
-        public async void RecentTransaksi()
+
+        [ObservableProperty]
+        double totalPemasukan;
+        public async Task GetTotalPemasukan()
         {
-            var transaksiAll = await _transaksiRepository.GetRecentTransaksi();
-            RecentTransaksiSource.Clear();
-            foreach (var item in transaksiAll)
+            var walletId = await _authService.GetCurrentWalletId();
+            try
             {
-                RecentTransaksiSource.Add(item);
+                var totalPemasukan = await _transaksiRepository.GetTotalPemasukan(walletId);
+                TotalPemasukan = totalPemasukan;
             }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"********************************** UNHANDLED EXCEPTION! Details: {ex.Message}");
+            }
+
+        }
+
+        [ObservableProperty]
+        double totalPengeluaran;
+        public async Task GetTotalPengeluaran()
+        {
+            var walletId = await _authService.GetCurrentWalletId();
+            try
+            {
+                var totalPengeluaran = await _transaksiRepository.GetTotalPengeluaran(walletId);
+                TotalPengeluaran = totalPengeluaran;
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"********************************** UNHANDLED EXCEPTION! Details: {ex.Message}");
+            }
+        }
+
+        [ObservableProperty]
+        DateTime dateFrom;
+        partial void OnDateFromChanged(DateTime value)
+        {
+            RefreshData();
+        }
+
+        [ObservableProperty]
+        DateTime dateTo;
+        partial void OnDateToChanged(DateTime value)
+        {
+            RefreshData();
         }
 
         [ObservableProperty]
@@ -43,67 +88,17 @@ namespace DotnetMauiApp.ViewModels
 
         [ObservableProperty]
         string lokasiFileSystem;
-        [ObservableProperty]
-         string deskripsi;
 
         [ObservableProperty]
-         double jumlahUang;
-
-        [ObservableProperty]
-         string tipeTransaksi;
-        
-        [RelayCommand]
-        async void AddPemasukan()
-        {
-            if (string.IsNullOrEmpty(Deskripsi))
-            {
-                return;
-            }
-            if(double.IsNaN(JumlahUang))
-            {
-                return;
-            }
-            var transaksi = new Transaksi
-            {
-                Description = Deskripsi,
-                JumlahUang = JumlahUang,
-                CreatedAt = DateTime.Now,
-                TipeTransaksi = "In",
-            };
-
-            await _transaksiRepository.AddTransaksi(transaksi);
-            TransaksiAll();
-            RecentTransaksi();
-
-            Deskripsi = string.Empty;
-            JumlahUang = 0;
-        }
+        bool isBusy;
 
         [RelayCommand]
-        async void AddPengeluaran()
+        void RefreshData()
         {
-            if (string.IsNullOrEmpty(Deskripsi))
-            {
-                return;
-            }
-            if (double.IsNaN(JumlahUang))
-            {
-                return;
-            }
-            var transaksi = new Transaksi
-            {
-                Description = Deskripsi,
-                JumlahUang = JumlahUang,
-                CreatedAt = DateTime.Now,
-                TipeTransaksi = "Out"
-            };
-
-            await _transaksiRepository.AddTransaksi(transaksi);
+            IsBusy = true;
             TransaksiAll();
-            RecentTransaksi();
-
-            Deskripsi = string.Empty;
-            JumlahUang = 0;
+            IsBusy = false;
         }
+
     }
 }

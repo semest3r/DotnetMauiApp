@@ -3,63 +3,100 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:DotnetMauiApp.ViewModels"
              xmlns:model="clr-namespace:DotnetMauiApp.Models"
+             xmlns:windows="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"
              x:Class="DotnetMauiApp.Views.TransaksiPage"
              x:DataType="viewmodel:TransaksiViewModel"
              Title="TransaksiPage"
+             BackgroundColor="{StaticResource Gray100}"
              >
-    <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="8">
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
-                <BoxView BackgroundColor="{StaticResource PrimaryDark}"/>
-                <VerticalStackLayout Padding="16">
-                    <Label Text="Pemasukan" FontSize="16"
+    <RefreshView windows:RefreshView.RefreshPullDirection="LeftToRight"
+                 IsRefreshing="{Binding IsBusy}"
+                 Command="{Binding RefreshDataCommand}">
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="8">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+                    <Border BackgroundColor="White" 
+                            StrokeThickness="0" 
+                            StrokeShape="RoundRectangle 8,8,8,8">
+                        <VerticalStackLayout Padding="16">
+                        <Label Text="Pemasukan" FontSize="16"
                        HorizontalOptions="Center"/>
-                    <Label Text="Rp. 500.000"
+                        <Label Text="{Binding TotalPemasukan, StringFormat='Rp. {0:N0}'}"
                        HorizontalOptions="Center"/>
-                </VerticalStackLayout>
-                <BoxView BackgroundColor="{StaticResource PrimaryDark}"
-                     Grid.Column="1" />
-                <VerticalStackLayout Grid.Column="1"
+                    </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" 
+                            BackgroundColor="White" 
+                            StrokeThickness="0" 
+                            StrokeShape="RoundRectangle 8,8,8,8">
+                        <VerticalStackLayout Grid.Column="1"
                                      Padding="16">
-                    <Label Text="Pengeluaran" 
+                            <Label Text="Pengeluaran" 
                            FontSize="16"
                            HorizontalOptions="Center"/>
-                    <Label Text="Rp. 100.000" 
+                            <Label Text="{Binding TotalPengeluaran, StringFormat='Rp. {0:N0}'}" 
                        HorizontalOptions="Center"/>
-                </VerticalStackLayout>
-            </Grid>
-            <Grid ColumnDefinitions="*,*">
-                <HorizontalStackLayout HorizontalOptions="Center" 
-                                       VerticalOptions="Center">
-                    <Label VerticalOptions="Center" Text="From" />
-                <DatePicker />
-                </HorizontalStackLayout>
-                <HorizontalStackLayout Grid.Column="1"
-                                       HorizontalOptions="Center" 
-                                       VerticalOptions="Center">
-                <Label VerticalOptions="Center" Text="To" />
-                <DatePicker Grid.Column="1" />
-                </HorizontalStackLayout>
-            </Grid>
-            <Label Text="Beberapa Transaksi Terbaru" />
-            <Grid ColumnDefinitions="150,50,*,100">
-                <Label  Text="Deskripsi" />
-                <Label Grid.Column="1" Text="" />
-                <Label Grid.Column="2" Text="Jumlah" />
-                <Label Grid.Column="3" Text="Waktu/Tanggal" />
-            </Grid>
-            <CollectionView ItemsSource="{Binding TransaksiSource}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type model:Transaksi}">
-                        <Grid ColumnDefinitions="150,50,*,100">
-                            <Label  Text="{Binding Description}" />
-                            <Label Grid.Column="1" Text="{Binding TipeTransaksi}" />
-                            <Label Grid.Column="2" Text="{Binding JumlahUang}" />
-                            <Label Grid.Column="3" Text="{Binding CreatedAt}" />
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
-    </ScrollView>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+                    <Border BackgroundColor="White" 
+                        StrokeThickness="0" 
+                        StrokeShape="RoundRectangle 8,8,8,8">
+                    <HorizontalStackLayout HorizontalOptions="Center">
+                        <Label Text="Date From" 
+                               VerticalOptions="Center"/>
+                        <DatePicker Date="{Binding DateFrom}" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" BackgroundColor="White" 
+                        StrokeThickness="0" 
+                        StrokeShape="RoundRectangle 8,8,8,8">
+                        <HorizontalStackLayout HorizontalOptions="Center">
+                            <Label Text="Date To" 
+                               VerticalOptions="Center"/>
+                            <DatePicker Date="{Binding DateTo}" 
+                                        VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+                <CollectionView ItemsSource="{Binding TransaksiSource}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type model:Transaksi}">
+                                <SwipeView>
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Delete"
+                                                       IconImageSource="system_uicons_trash.png"
+                                                       BackgroundColor="Red"/>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <SwipeView.LeftItems>
+                                        <SwipeItems>
+                                            <SwipeItem Text="Edit"
+                                                       IconImageSource="system_uicons_write.png" 
+                                                       BackgroundColor="Blue"/>
+                                        </SwipeItems>
+                                    </SwipeView.LeftItems>
+                                <Border BackgroundColor="White"
+                                        StrokeShape="RoundRectangle 8,8,8,8"
+                                        >
+                                    <Grid ColumnDefinitions="*,50,*,*"
+                                          VerticalOptions="Center"
+                                          Padding="16">
+                                        <Label Text="{Binding Description}" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding TipeTransaksi}"
+                                               FontSize="16"/>
+                                        <Label Grid.Column="2" Text="{Binding JumlahUang, StringFormat='Rp. {0:N0}'}" />
+                                        <Label Grid.Column="3" Text="{Binding CreatedAt}" HorizontalOptions="End"/>
+                                    </Grid>
+                            </Border>
+                                </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
 </ContentPage>

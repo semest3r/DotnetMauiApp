@@ -13,5 +13,6 @@ namespace DotnetMauiApp.Models
         public double TotalUang { get; set; }
         public string TipeTransaksi { get; set; }
         public DateTime CreatedAt { get; set; }
+        public int WalletId { get; set; }
     }
 }

@@ -5,10 +5,10 @@ namespace DotnetMauiApp.Views;
 
 public partial class AddPemasukanPopUp : Popup
 {
-	public AddPemasukanPopUp(TransaksiViewModel viewModel)
+	public AddPemasukanPopUp(PemasukanPopUpViewModel vm)
 	{
 		InitializeComponent();
-		BindingContext = viewModel;
+		BindingContext = vm;
 	}
 
     private void Close_Clicked(object sender, EventArgs e)

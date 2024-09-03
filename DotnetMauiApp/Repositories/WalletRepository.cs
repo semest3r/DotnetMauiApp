@@ -1,5 +1,4 @@
-﻿using Android.App;
-using DotnetMauiApp.Data;
+﻿using DotnetMauiApp.Data;
 using DotnetMauiApp.Models;
 using SQLite;
 
@@ -25,13 +24,6 @@ namespace DotnetMauiApp.Repositories
             return result;
         }
 
-        public async Task<Wallet> GetActiveWallet()
-        {
-            await Init();
-            var result = await conn.Table<Wallet>().FirstOrDefaultAsync(x => x.IsActive == true);
-            return result;
-        }
-
         public async Task<List<Wallet>> GetAll()
         {
             await Init();
@@ -44,6 +36,13 @@ namespace DotnetMauiApp.Repositories
         {
             await Init();
             var wallet = await conn.Table<Wallet>().FirstOrDefaultAsync(x => x.Id == id);
+            return wallet;
+        }
+
+        public async Task<Wallet> GetFirstWallet()
+        {
+            await Init();
+            var wallet = await conn.Table<Wallet>().FirstOrDefaultAsync();
             return wallet;
         }
 

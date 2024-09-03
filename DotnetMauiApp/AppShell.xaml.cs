@@ -1,19 +1,22 @@
 ﻿using DotnetMauiApp.Repositories;
+using DotnetMauiApp.Views;
 
 namespace DotnetMauiApp
 {
     public partial class AppShell : Shell
     {
-        private readonly WalletRepository _walletRepository;
-        public AppShell(WalletRepository walletRepository)
+        public AppShell()
         {
             InitializeComponent();
-            _walletRepository = walletRepository;
-            var activeWallet = _walletRepository.GetActiveWallet();
-            if(activeWallet == null )
-            {
-                Shell.Current.GoToAsync("RegisterPage");
-            }
+            RegisterRoute();
+        }
+
+        static void RegisterRoute()
+        {
+            Routing.RegisterRoute(nameof(OnBoardingPage), typeof(OnBoardingPage));
+            Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
+            Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
+            Routing.RegisterRoute(nameof(TransaksiPage), typeof(TransaksiPage));
         }
     }
 }
