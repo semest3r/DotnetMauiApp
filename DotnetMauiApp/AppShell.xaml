@@ -30,4 +30,8 @@
                   FlyoutItemIsVisible="False"
                   ContentTemplate="{DataTemplate views:RegisterPage}" 
                   Route="RegisterPage"/>
+    <ShellContent Shell.FlyoutBehavior="Disabled"
+                  FlyoutItemIsVisible="False"
+                  ContentTemplate="{DataTemplate views:ResetDatabasePage}" 
+                  Route="ResetDatabasePage"/>
 </Shell>

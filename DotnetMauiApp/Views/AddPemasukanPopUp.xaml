@@ -11,13 +11,13 @@
                          BackgroundColor="White"
                          WidthRequest="300">
         <VerticalStackLayout Spacing="8">
-            <Label Text="Deskripsi"/>
+            <Label Text="Desctiption"/>
             <Border StrokeThickness="0"
                     BackgroundColor="{StaticResource SecondaryDark}"
                     StrokeShape="RoundRectangle 8,8,8,8" 
                     Padding="4,0">
-                <Entry Text="{Binding Deskripsi}"
-                   Placeholder="Deskripsi..." 
+                <Entry Text="{Binding Description}"
+                   Placeholder="Type a description..." 
                    PlaceholderColor="{StaticResource Primary}"/>
             </Border>
         </VerticalStackLayout>
@@ -28,7 +28,7 @@
                     BackgroundColor="{StaticResource SecondaryDark}"
                     StrokeShape="RoundRectangle 8,8,8,8" 
                     Padding="4,0">
-                <Entry Text="{Binding JumlahUang}" Keyboard="Numeric" Placeholder="Jumlah uang" PlaceholderColor="{StaticResource Primary}" />
+                <Entry Text="{Binding TotalMoney}" Keyboard="Numeric" Placeholder="Jumlah uang" PlaceholderColor="{StaticResource Primary}" />
             </Border>
         </VerticalStackLayout>
         <Button Text="Submit" Command="{Binding AddPemasukanCommand}" Clicked="Close_Clicked"/> 

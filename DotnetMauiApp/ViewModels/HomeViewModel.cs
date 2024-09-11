@@ -11,52 +11,50 @@ namespace DotnetMauiApp.ViewModels
 {
     public partial class HomeViewModel : BaseViewModel
     {
-        readonly TransaksiRepository _transaksiRepository;
+        readonly TransactionRepository _transaksiRepository;
         readonly WalletRepository _walletRepository;
         readonly IPopupService _popupService;
 
         public HomeViewModel(AuthService authService,
-                             TransaksiRepository transaksiRepository,
+                             TransactionRepository transaksiRepository,
                              WalletRepository walletRepository,
                              IPopupService popupService) : base(authService)
         {
             _popupService = popupService;
             _transaksiRepository = transaksiRepository;
             _walletRepository = walletRepository;
-            RecentTransaksiResource = [];
+            RecentTransactionResource = [];
             CurrentWallet();
             RecentTransaksi();
         }
 
+        [ObservableProperty]
+        Wallet wallet;
         public async void CurrentWallet()
         {
             var walletId = await _authService.GetCurrentWalletId();
-            var wallet = await _walletRepository.GetById(walletId);
+            var wallet = await _walletRepository.GetWalletById(walletId);
             Wallet = new Wallet
             {
                 Id = wallet.Id,
                 Name = wallet.Name,
-                TotalUang = wallet.TotalUang,
+                TotalMoney = wallet.TotalMoney,
             };
         }
 
+        [ObservableProperty]
+        ObservableCollection<Transaction> recentTransactionResource;
         public async void RecentTransaksi()
         {
             var walletId = await _authService.GetCurrentWalletId();
-            var transaksiAll = await _transaksiRepository.GetRecentTransaksi(walletId);
-
-            RecentTransaksiResource.Clear();
+            var transaksiAll = await _transaksiRepository.GetRecentTransaction(walletId);
+            RecentTransactionResource.Clear();
             foreach (var item in transaksiAll)
             {
-                RecentTransaksiResource.Add(item);
+                RecentTransactionResource.Add(item);
             }
         }
 
-        [ObservableProperty]
-        ObservableCollection<Transaksi> recentTransaksiResource;
-
-        [ObservableProperty]
-        Wallet wallet;
 
         [RelayCommand]
         async Task ShowAddPemasukanPopup()

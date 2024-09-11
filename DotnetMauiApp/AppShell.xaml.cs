@@ -7,6 +7,7 @@ namespace DotnetMauiApp
     {
         public AppShell()
         {
+            Preferences.Clear();
             InitializeComponent();
             RegisterRoute();
         }
@@ -17,6 +18,7 @@ namespace DotnetMauiApp
             Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
             Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
             Routing.RegisterRoute(nameof(TransaksiPage), typeof(TransaksiPage));
+            Routing.RegisterRoute(nameof(ResetDatabasePage), typeof(ResetDatabasePage));
         }
     }
 }

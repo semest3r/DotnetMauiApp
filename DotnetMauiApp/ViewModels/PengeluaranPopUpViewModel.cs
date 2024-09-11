@@ -10,12 +10,12 @@ namespace DotnetMauiApp.ViewModels
     public partial class PengeluaranPopUpViewModel : BaseViewModel
     {
 
-        readonly TransaksiRepository _transaksiRepository;
+        readonly TransactionRepository _transactionRepository;
         readonly WalletRepository _walletRepository;
  
-        public PengeluaranPopUpViewModel(AuthService authService,TransaksiRepository transaksiRepository, WalletRepository walletRepository) : base(authService)
+        public PengeluaranPopUpViewModel(AuthService authService, TransactionRepository transactionRepository, WalletRepository walletRepository) : base(authService)
         {
-            _transaksiRepository = transaksiRepository;
+            _transactionRepository = transactionRepository;
             _walletRepository = walletRepository;
         }
 
@@ -23,7 +23,7 @@ namespace DotnetMauiApp.ViewModels
         string deskripsi;
 
         [ObservableProperty]
-        double jumlahUang;
+        double totalMoney;
 
         [RelayCommand]
         async Task AddPengeluaran()
@@ -32,34 +32,44 @@ namespace DotnetMauiApp.ViewModels
             {
                 return;
             }
-            if (double.IsNaN(JumlahUang))
+            if (double.IsNaN(TotalMoney))
             {
                 return;
             }
 
             var walletId = await _authService.GetCurrentWalletId();
-            var currentWallet = await _walletRepository.GetById(walletId);
+            var currentWallet = await _walletRepository.GetWalletById(walletId);
+            var currentTotalMoney = currentWallet.TotalMoney - TotalMoney;
 
-            var transaksi = new Transaksi
+            var transaction = new Transaction
             {
                 Description = Deskripsi,
-                JumlahUang = JumlahUang,
+                TotalMoney = TotalMoney,
+                CurrrentTotalMoney = TotalMoney,
                 CreatedAt = DateTime.Now,
-                TipeTransaksi = "Out",
+                TypeTransaction = "Out",
                 WalletId = currentWallet.Id,
             };
 
-            var wallet = new Wallet
+            var updateWallet = new Wallet
             {
-                Id = await _authService.GetCurrentWalletId(),
-                TotalUang = currentWallet.TotalUang - JumlahUang,
+                Id = currentWallet.Id,
+                Name = currentWallet.Name,
+                TotalMoney = currentWallet.TotalMoney - TotalMoney,
             };
 
-            await _transaksiRepository.AddTransaksi(transaksi);
-            await _walletRepository.UpdateWallet(wallet);
+            try
+            {
+                await _transactionRepository.AddTransaction(transaction);
+                await _walletRepository.UpdateWallet(currentWallet, updateWallet);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine($"********************************** UNHANDLED EXCEPTION! Details: {e.Message}");
+            }
 
             Deskripsi = string.Empty;
-            JumlahUang = 0;
+            TotalMoney = 0;
         }
 
     }

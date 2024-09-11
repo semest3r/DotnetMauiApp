@@ -25,10 +25,10 @@ namespace DotnetMauiApp.ViewModels
             var wallet = new Wallet
             {
                 Name = WalletName,
-                TotalUang = 0,
+                TotalMoney = 0,
             };
 
-            var createdWalelt = await _walletRepository.AddNewWallet(wallet);
+            var createdWalelt = await _walletRepository.AddWallet(wallet);
             Preferences.Default.Set("wallet", createdWalelt);
             WalletName = string.Empty;
             await Shell.Current.GoToAsync($"//{nameof(HomePage)}");

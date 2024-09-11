@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using DotnetMauiApp.Data;
 using DotnetMauiApp.Repositories;
 using DotnetMauiApp.Services;
 using DotnetMauiApp.ViewModels;
@@ -38,14 +39,18 @@ namespace DotnetMauiApp
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            //Database
+            builder.Services.AddDbContext<DataContext>();
+
             //Services
             builder.Services.AddTransient<AuthService>();
 
             //Page
             builder.Services.AddTransient<OnBoardingPage>();
-            builder.Services.AddSingleton<HomePage>();
+            builder.Services.AddTransient<HomePage>();
             builder.Services.AddTransient<TransaksiPage>();
             builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<ResetDatabasePage>();
 
             //Poup
             builder.Services.AddTransientPopup<AddPemasukanPopUp, PemasukanPopUpViewModel>();
@@ -53,12 +58,12 @@ namespace DotnetMauiApp
 
             //View Model
             builder.Services.AddSingleton<HomeViewModel>();
-            builder.Services.AddTransient<TransaksiViewModel>();
+            builder.Services.AddTransient<TransactionViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
 
             //Database
-            builder.Services.AddSingleton<WalletRepository>();
-            builder.Services.AddSingleton<TransaksiRepository>();
+            builder.Services.AddTransient<WalletRepository>();
+            builder.Services.AddTransient<TransactionRepository>();
 
             Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(Entry), (handler, view) =>
             {

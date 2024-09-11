@@ -1,13 +1,22 @@
-﻿namespace DotnetMauiApp
+﻿using DotnetMauiApp.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace DotnetMauiApp
 {
     public partial class App : Application
     {
-        public App()
+        private readonly DataContext _dataContext;
+        public App(DataContext dataContext)
         {
+            _dataContext = dataContext;
+            _dataContext.Database.Migrate();
+
+            //Exception
             AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
             InitializeComponent();
             MainPage = new AppShell();
-            Preferences.Default.Clear();
+            
+            //Default Theme
             Current.UserAppTheme = AppTheme.Light;
         }
 

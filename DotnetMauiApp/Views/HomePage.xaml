@@ -21,7 +21,7 @@
                         <Label 
                         Text="{Binding Wallet.Name}"
                         TextColor="{StaticResource Primary}"/>
-                        <Label Text="{Binding Wallet.TotalUang, StringFormat='Rp. {0:N}'}"
+                        <Label Text="{Binding Wallet.TotalMoney, StringFormat='Rp. {0:N0}'}"
                             FontSize="24" 
                             FontAttributes="Bold" 
                             TextColor="{StaticResource Primary}" />
@@ -40,14 +40,14 @@
                            TextColor="{StaticResource Secondary}"
                            FontSize="16"
                            />
-                    <CollectionView ItemsSource="{Binding RecentTransaksiResource}">
+                    <CollectionView ItemsSource="{Binding RecentTransactionResource}">
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout Orientation="Vertical"
                                              VerticalItemSpacing="4"
                          />
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="{x:Type model:Transaksi}">
+                            <DataTemplate x:DataType="{x:Type model:Transaction}">
                                 <Border BackgroundColor="White"
                                         StrokeShape="RoundRectangle 8,8,8,8"
                                         >
@@ -56,9 +56,9 @@
                                           Padding="16">
                                         <Label Text="{Binding Description}" />
                                         <Label Grid.Column="1"
-                                               Text="{Binding TipeTransaksi}"
+                                               Text="{Binding TypeTransaction}"
                                                FontSize="16"/>
-                                        <Label Grid.Column="2" Text="{Binding JumlahUang, StringFormat='Rp. {0:N}'}" />
+                                        <Label Grid.Column="2" Text="{Binding TotalMoney, StringFormat='Rp. {0:N0}'}" />
                                         <Label Grid.Column="3" Text="{Binding CreatedAt}" HorizontalOptions="End"/>
                                     </Grid>
                                 </Border>

@@ -1,63 +1,54 @@
 ﻿using DotnetMauiApp.Data;
 using DotnetMauiApp.Models;
+using Microsoft.EntityFrameworkCore;
 using SQLite;
 
 namespace DotnetMauiApp.Repositories
 {
     public class WalletRepository
     {
-        SQLiteAsyncConnection conn;
+        DataContext _context;
 
-        async Task Init()
+        public WalletRepository(DataContext dataContext)
         {
-            if (conn != null)
-            {
-                return;
-            }
-            conn = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
-            await conn.CreateTableAsync<Wallet>();
-        }
-        public  async Task<int> AddNewWallet(Wallet wallet)
-        {
-            await Init();
-            int result = await conn.InsertAsync(wallet);
-            return result;
+            _context = dataContext;
         }
 
-        public async Task<List<Wallet>> GetAll()
+        public async Task<IEnumerable<Wallet>> GetAllWallet()
         {
-            await Init();
-            List<Wallet> list = await conn.Table<Wallet>().ToListAsync();
-            return list;
+            var wallets = await _context.Wallets.ToListAsync();
+            return wallets;
         }
 
-
-        public async Task<Wallet> GetById(int id)
+        public async Task<Wallet?> GetWalletById(int walletId)
         {
-            await Init();
-            var wallet = await conn.Table<Wallet>().FirstOrDefaultAsync(x => x.Id == id);
+            var wallet = await _context.Wallets.FirstOrDefaultAsync(x => x.Id == walletId);
             return wallet;
         }
 
-        public async Task<Wallet> GetFirstWallet()
+        public async Task<Wallet?> GetFirstWallet()
         {
-            await Init();
-            var wallet = await conn.Table<Wallet>().FirstOrDefaultAsync();
+            var wallet = await _context.Wallets.FirstOrDefaultAsync();
             return wallet;
         }
-
-        public async Task<int> UpdateWallet(Wallet wallet)
+        public async Task<int> AddWallet(Wallet wallet)
         {
-            await Init();
-            int result = await conn.UpdateAsync(wallet);
-            return result;
+            var created_wallet = _context.Wallets.Add(wallet);
+            await _context.SaveChangesAsync();
+
+            return created_wallet.Entity.Id;
         }
 
-        public async Task<int> DeleteWallet(int id)
+        public async Task UpdateWallet(Wallet wallet, Wallet updateWallet)
         {
-            await Init();
-            int result = await conn.DeleteAsync<Wallet>(id);
-            return result;
+            _context.Entry(wallet).CurrentValues.SetValues(updateWallet);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteWallet(Wallet wallet)
+        {
+            _context.Wallets.Remove(wallet);
+            await _context.SaveChangesAsync();
         }
     }
 }

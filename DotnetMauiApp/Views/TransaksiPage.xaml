@@ -5,7 +5,7 @@
              xmlns:model="clr-namespace:DotnetMauiApp.Models"
              xmlns:windows="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"
              x:Class="DotnetMauiApp.Views.TransaksiPage"
-             x:DataType="viewmodel:TransaksiViewModel"
+             x:DataType="viewmodel:TransactionViewModel"
              Title="TransaksiPage"
              BackgroundColor="{StaticResource Gray100}"
              >
@@ -60,15 +60,17 @@
                         </HorizontalStackLayout>
                     </Border>
                 </Grid>
-                <CollectionView ItemsSource="{Binding TransaksiSource}" SelectionMode="None">
+                <CollectionView ItemsSource="{Binding TransactionSource}" SelectionMode="None">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="{x:Type model:Transaksi}">
+                        <DataTemplate x:DataType="{x:Type model:Transaction}">
                                 <SwipeView>
                                     <SwipeView.RightItems>
                                         <SwipeItems>
                                             <SwipeItem Text="Delete"
                                                        IconImageSource="system_uicons_trash.png"
-                                                       BackgroundColor="Red"/>
+                                                       BackgroundColor="Red"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TransactionViewModel}}, Path=DeleteTransaksiCommand}"
+                                                       CommandParameter="{Binding .}"/>
                                         </SwipeItems>
                                     </SwipeView.RightItems>
                                     <SwipeView.LeftItems>
@@ -86,9 +88,9 @@
                                           Padding="16">
                                         <Label Text="{Binding Description}" />
                                         <Label Grid.Column="1"
-                                               Text="{Binding TipeTransaksi}"
+                                               Text="{Binding TypeTransaction}"
                                                FontSize="16"/>
-                                        <Label Grid.Column="2" Text="{Binding JumlahUang, StringFormat='Rp. {0:N0}'}" />
+                                        <Label Grid.Column="2" Text="{Binding TotalMoney, StringFormat='Rp. {0:N0}'}" />
                                         <Label Grid.Column="3" Text="{Binding CreatedAt}" HorizontalOptions="End"/>
                                     </Grid>
                             </Border>
