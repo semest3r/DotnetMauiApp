@@ -87,6 +87,8 @@ namespace DotnetMauiApp.ViewModels
         async partial void OnDateToChanged(DateTime value)
         {
            await RefreshData();
+            await GetTotalPemasukan();
+            await GetTotalPengeluaran();
         }
 
         [ObservableProperty]
@@ -118,7 +120,14 @@ namespace DotnetMauiApp.ViewModels
         [RelayCommand]
         async Task EditTransaksiPopup(Transaction transaksi)
         {
-            await _popupService.ShowPopupAsync<EditTransaksiPopup>(onPresenting: vm => vm.Transaction = transaksi);
+            try
+            {
+                await _popupService.ShowPopupAsync<EditTransaksiPopupViewModel>(onPresenting: vm => vm.Transaction = transaksi);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"********************************** UNHANDLED EXCEPTION! Details: {ex.Message}");
+            }
         }
     }
 }

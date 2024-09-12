@@ -55,11 +55,12 @@ namespace DotnetMauiApp
             //Poup
             builder.Services.AddTransientPopup<AddPemasukanPopUp, PemasukanPopUpViewModel>();
             builder.Services.AddTransientPopup<AddPengeluaranPopUp, PengeluaranPopUpViewModel>();
-
+            builder.Services.AddTransientPopup<EditTransaksiPopup, EditTransaksiPopupViewModel>();
             //View Model
             builder.Services.AddSingleton<HomeViewModel>();
             builder.Services.AddTransient<TransactionViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
+            builder.Services.AddTransient<EditTransaksiPopupViewModel>();
 
             //Database
             builder.Services.AddTransient<WalletRepository>();

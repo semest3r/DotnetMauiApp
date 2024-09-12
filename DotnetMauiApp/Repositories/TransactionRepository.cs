@@ -62,9 +62,9 @@ namespace DotnetMauiApp.Repositories
             return result.Entity.Id;
         }
 
-        public async Task UpdateTransaction(Transaction transaction)
+        public async Task UpdateTransaction(Transaction oldTransaction, Transaction updateTransaction)
         {
-            _context.Transactions.Update(transaction);
+            _context.Entry(oldTransaction).CurrentValues.SetValues(updateTransaction);
             await _context.SaveChangesAsync();
         }
 

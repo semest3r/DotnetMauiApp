@@ -4,7 +4,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewmodel="clr-namespace:DotnetMauiApp.ViewModels"
              x:Class="DotnetMauiApp.Views.EditTransaksiPopup"
-             x:DataType="viewmodel:EditTransaksiPopup"
+             x:DataType="viewmodel:EditTransaksiPopupViewModel"
              CanBeDismissedByTappingOutsideOfPopup="True"
              >
     <VerticalStackLayout Padding="16" Spacing="16" WidthRequest="300" BackgroundColor="White">

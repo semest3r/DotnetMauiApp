@@ -77,7 +77,9 @@
                                         <SwipeItems>
                                             <SwipeItem Text="Edit"
                                                        IconImageSource="system_uicons_write.png" 
-                                                       BackgroundColor="Blue"/>
+                                                       BackgroundColor="Blue"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TransactionViewModel}}, Path=EditTransaksiPopupCommand}"
+                                                       CommandParameter="{Binding .}"/>
                                         </SwipeItems>
                                     </SwipeView.LeftItems>
                                 <Border BackgroundColor="White"
