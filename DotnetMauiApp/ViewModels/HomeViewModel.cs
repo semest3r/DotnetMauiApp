@@ -5,6 +5,7 @@ using DotnetMauiApp.Models;
 using DotnetMauiApp.Repositories;
 using DotnetMauiApp.Services;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 
 namespace DotnetMauiApp.ViewModels
@@ -24,22 +25,35 @@ namespace DotnetMauiApp.ViewModels
             _transaksiRepository = transaksiRepository;
             _walletRepository = walletRepository;
             RecentTransactionResource = [];
+            Wallets = [];
             CurrentWallet();
-            RecentTransaksi();
+            AllWallets();
         }
 
         [ObservableProperty]
-        Wallet wallet;
+        ObservableCollection<Wallet> wallets;
+        public async void AllWallets()
+        {
+            var wallets = await _walletRepository.GetAllWallet();
+            Wallets.Clear();
+            foreach (var item in wallets)
+            {
+                Wallets.Add(item);
+            }
+        }
+
+        [ObservableProperty]
+        Wallet selectedWallet;
         public async void CurrentWallet()
         {
             var walletId = await _authService.GetCurrentWalletId();
             var wallet = await _walletRepository.GetWalletById(walletId);
-            Wallet = new Wallet
-            {
-                Id = wallet.Id,
-                Name = wallet.Name,
-                TotalMoney = wallet.TotalMoney,
-            };
+            SelectedWallet = wallet;
+        }
+        partial void OnSelectedWalletChanged(Wallet value)
+        {
+            Preferences.Set("wallet", SelectedWallet.Id);
+            RecentTransaksi();
         }
 
         [ObservableProperty]
@@ -54,7 +68,6 @@ namespace DotnetMauiApp.ViewModels
                 RecentTransactionResource.Add(item);
             }
         }
-
 
         [RelayCommand]
         async Task ShowAddPemasukanPopup()
@@ -76,11 +89,13 @@ namespace DotnetMauiApp.ViewModels
         {
             IsBusy = true;
 
+            AllWallets();
             CurrentWallet();
             RecentTransaksi();
 
             IsBusy = false;
         }
+
     }
 }
 

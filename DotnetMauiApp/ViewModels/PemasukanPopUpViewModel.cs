@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using DotnetMauiApp.Models;
 using DotnetMauiApp.Repositories;
 using DotnetMauiApp.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace DotnetMauiApp.ViewModels
 {

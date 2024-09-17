@@ -16,22 +16,6 @@ namespace DotnetMauiApp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
-                .UseSentry(options => {
-                    // The DSN is the only required setting.
-                    options.Dsn = "https://257e831fe2a7f4c7203e62a9633fffc9@o4507887972581376.ingest.de.sentry.io/4507887974613072";
-
-                    // Use debug mode if you want to see what the SDK is doing.
-                    // Debug messages are written to stdout with Console.Writeline,
-                    // and are viewable in your IDE's debug console or with 'adb logcat', etc.
-                    // This option is not recommended when deploying your application.
-                    options.Debug = true;
-
-                    // Set TracesSampleRate to 1.0 to capture 100% of transactions for tracing.
-                    // We recommend adjusting this value in production.
-                    options.TracesSampleRate = 1.0;
-
-                    // Other Sentry options can be set here.
-                })
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
@@ -56,8 +40,9 @@ namespace DotnetMauiApp
             builder.Services.AddTransientPopup<AddPemasukanPopUp, PemasukanPopUpViewModel>();
             builder.Services.AddTransientPopup<AddPengeluaranPopUp, PengeluaranPopUpViewModel>();
             builder.Services.AddTransientPopup<EditTransaksiPopup, EditTransaksiPopupViewModel>();
+
             //View Model
-            builder.Services.AddSingleton<HomeViewModel>();
+            builder.Services.AddTransient<HomeViewModel>();
             builder.Services.AddTransient<TransactionViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
             builder.Services.AddTransient<EditTransaksiPopupViewModel>();

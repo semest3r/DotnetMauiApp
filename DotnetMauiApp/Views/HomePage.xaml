@@ -13,28 +13,38 @@
                  IsRefreshing="{Binding IsBusy}"
                  Command="{Binding RefreshDataCommand}">
         <ScrollView>
-            <VerticalStackLayout Spacing="16">
-                <VerticalStackLayout Padding="8"
-                                     Spacing="8" 
-                                     BackgroundColor="White">
-                    <VerticalStackLayout Spacing="4">
-                        <Label 
-                        Text="{Binding Wallet.Name}"
-                        TextColor="{StaticResource Primary}"/>
-                        <Label Text="{Binding Wallet.TotalMoney, StringFormat='Rp. {0:N0}'}"
-                            FontSize="24" 
-                            FontAttributes="Bold" 
-                            TextColor="{StaticResource Primary}" />
-                    </VerticalStackLayout>
-                    <Grid ColumnSpacing="10" ColumnDefinitions="*,*">
-                        <Button Text="Pemasukan" 
-                    Command="{Binding ShowAddPemasukanPopupCommand}"/>
-                        <Button Grid.Column="1"
-                    Text="Penarikan"
-                    Command="{Binding ShowAddPengeluaranPopupCommand}"/>
-                    </Grid>
-                </VerticalStackLayout>
-
+            <VerticalStackLayout Spacing="8" Padding="16">
+                <Picker
+                    HorizontalOptions="Start"
+                    WidthRequest="200"
+                        x:DataType="{x:Type model:Wallet}"
+                        TextColor="{StaticResource Primary}"
+                        ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=Wallets}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=SelectedWallet}"
+                    />
+                    <Frame Padding="16"
+                           BackgroundColor="White"
+                           CornerRadius="16">
+                        <VerticalStackLayout Spacing="16">
+                            <VerticalStackLayout Spacing="8">
+                                <Label 
+                                Text="Current Money"
+                                TextColor="{StaticResource Primary}"/>
+                                <Label Text="{Binding SelectedWallet.TotalMoney, StringFormat='Rp. {0:N0}'}"
+                                    FontSize="24" 
+                                    FontAttributes="Bold" 
+                                    TextColor="{StaticResource Primary}" />
+                            </VerticalStackLayout>
+                            <Grid ColumnSpacing="10" ColumnDefinitions="*,*">
+                                <Button Text="Deposit" 
+                            Command="{Binding ShowAddPemasukanPopupCommand}"/>
+                                <Button Grid.Column="1"
+                            Text="Withdraw"
+                            Command="{Binding ShowAddPengeluaranPopupCommand}"/>
+                            </Grid>
+                        </VerticalStackLayout>  
+                </Frame>
                 <VerticalStackLayout Padding="8" Spacing="8">
                     <Label Text="Recent Transaction" 
                            TextColor="{StaticResource Secondary}"

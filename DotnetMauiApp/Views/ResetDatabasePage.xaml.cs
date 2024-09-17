@@ -16,7 +16,7 @@ public partial class ResetDatabasePage : ContentPage
         _dataContext.Database.ExecuteSqlRaw("Delete from 'transactions'");
         _dataContext.Database.ExecuteSqlRaw("Delete from 'wallets'");
         Preferences.Clear();
-        await Shell.Current.GoToAsync($"../{nameof(OnBoardingPage)}");
+        App.Current.Quit();
     }
     private async void Cancel_Clicked(object sender, EventArgs e)
     {
