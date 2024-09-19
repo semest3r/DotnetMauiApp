@@ -28,8 +28,8 @@ namespace DotnetMauiApp.ViewModels
                 TotalMoney = 0,
             };
 
-            var createdWalelt = await _walletRepository.AddWallet(wallet);
-            Preferences.Default.Set("wallet", createdWalelt);
+            var createdWallet = await _walletRepository.AddWallet(wallet);
+            Preferences.Default.Set("wallet", createdWallet);
             WalletName = string.Empty;
             await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
         }

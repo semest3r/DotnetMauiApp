@@ -6,31 +6,41 @@
     xmlns:viewmodel="clr-namespace:DotnetMauiApp.ViewModels"
     x:Class="DotnetMauiApp.Views.AddPemasukanPopUp"
     x:DataType="viewmodel:PemasukanPopUpViewModel"
+    Color="Transparent"
     CanBeDismissedByTappingOutsideOfPopup="True">
-    <VerticalStackLayout Padding="16" Spacing="16" 
-                         BackgroundColor="White"
-                         WidthRequest="300">
-        <VerticalStackLayout Spacing="8">
-            <Label Text="Desctiption"/>
-            <Border StrokeThickness="0"
-                    BackgroundColor="{StaticResource SecondaryDark}"
-                    StrokeShape="RoundRectangle 8,8,8,8" 
-                    Padding="4,0">
-                <Entry Text="{Binding Description}"
-                   Placeholder="Type a description..." 
-                   PlaceholderColor="{StaticResource Primary}"/>
-            </Border>
-        </VerticalStackLayout>
+    <Frame Margin="4,4,4,4"
+           Padding="16"
+           HeightRequest="280"
+           WidthRequest="300"
+           BackgroundColor="{StaticResource SecondaryDark}">
+        <VerticalStackLayout Spacing="16">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Description"/>
+                <Frame CornerRadius="8"
+                Padding="4"
+                Margin="1"
+                HeightRequest="54"
+                BackgroundColor="White">
+                    <Entry Text="{Binding Deposit.Description}"
+                Placeholder="Type a description..." 
+                PlaceholderColor="{StaticResource Primary}"/>
+                </Frame>
+            </VerticalStackLayout>
 
-        <VerticalStackLayout Spacing="8">
-            <Label Text="Pemasukan"/>
-            <Border StrokeThickness="0"
-                    BackgroundColor="{StaticResource SecondaryDark}"
-                    StrokeShape="RoundRectangle 8,8,8,8" 
-                    Padding="4,0">
-                <Entry Text="{Binding TotalMoney}" Keyboard="Numeric" Placeholder="Jumlah uang" PlaceholderColor="{StaticResource Primary}" />
-            </Border>
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Deposit"/>
+                <Frame CornerRadius="8"
+                Padding="4"
+                Margin="1"
+                HeightRequest="54"
+                BackgroundColor="White">
+                    <Entry Text="{Binding Deposit.TotalMoney}" 
+                    Keyboard="Numeric" 
+                    Placeholder="Total Money" 
+                    PlaceholderColor="{StaticResource Primary}"/>
+                </Frame>
+            </VerticalStackLayout>
+            <Button Text="Submit" Command="{Binding AddPemasukanCommand}" Clicked="Close_Clicked"/>
         </VerticalStackLayout>
-        <Button Text="Submit" Command="{Binding AddPemasukanCommand}" Clicked="Close_Clicked"/> 
-    </VerticalStackLayout>
+    </Frame>
 </toolkit:Popup>

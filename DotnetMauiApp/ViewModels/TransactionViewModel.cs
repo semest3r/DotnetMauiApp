@@ -80,13 +80,15 @@ namespace DotnetMauiApp.ViewModels
         async partial void OnDateFromChanged(DateTime value)
         {
             await RefreshData();
+            await GetTotalPemasukan();
+            await GetTotalPengeluaran();
         }
 
         [ObservableProperty]
         DateTime dateTo;
         async partial void OnDateToChanged(DateTime value)
         {
-           await RefreshData();
+            await RefreshData();
             await GetTotalPemasukan();
             await GetTotalPengeluaran();
         }

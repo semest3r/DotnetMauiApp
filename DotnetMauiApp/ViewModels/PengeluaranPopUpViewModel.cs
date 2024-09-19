@@ -10,42 +10,39 @@ namespace DotnetMauiApp.ViewModels
     public partial class PengeluaranPopUpViewModel : BaseViewModel
     {
 
-        readonly TransactionRepository _transactionRepository;
+        readonly TransactionService _transactionService;
         readonly WalletRepository _walletRepository;
  
-        public PengeluaranPopUpViewModel(AuthService authService, TransactionRepository transactionRepository, WalletRepository walletRepository) : base(authService)
+        public PengeluaranPopUpViewModel(TransactionService transactionService, WalletRepository walletRepository,AuthService authService) : base(authService)
         {
-            _transactionRepository = transactionRepository;
+            _transactionService = transactionService;
             _walletRepository = walletRepository;
         }
 
         [ObservableProperty]
-        string deskripsi;
-
-        [ObservableProperty]
-        double totalMoney;
+        Withdraw withdraw;
 
         [RelayCommand]
         async Task AddPengeluaran()
         {
-            if (string.IsNullOrEmpty(Deskripsi))
+            if (string.IsNullOrEmpty(Withdraw.Description))
             {
                 return;
             }
-            if (double.IsNaN(TotalMoney))
+            if (double.IsNaN(Withdraw.TotalMoney))
             {
                 return;
             }
 
             var walletId = await _authService.GetCurrentWalletId();
             var currentWallet = await _walletRepository.GetWalletById(walletId);
-            var currentTotalMoney = currentWallet.TotalMoney - TotalMoney;
+            var currentTotalMoney = currentWallet.TotalMoney - Withdraw.TotalMoney;
 
             var transaction = new Transaction
             {
-                Description = Deskripsi,
-                TotalMoney = TotalMoney,
-                CurrrentTotalMoney = TotalMoney,
+                Description = Withdraw.Description,
+                TotalMoney = Withdraw.TotalMoney,
+                CurrrentTotalMoney = currentTotalMoney,
                 CreatedAt = DateTime.Now,
                 TypeTransaction = "Out",
                 WalletId = currentWallet.Id,
@@ -55,21 +52,13 @@ namespace DotnetMauiApp.ViewModels
             {
                 Id = currentWallet.Id,
                 Name = currentWallet.Name,
-                TotalMoney = currentWallet.TotalMoney - TotalMoney,
+                TotalMoney = currentWallet.TotalMoney - Withdraw.TotalMoney,
             };
 
-            try
-            {
-                await _transactionRepository.AddTransaction(transaction);
-                await _walletRepository.UpdateWallet(currentWallet, updateWallet);
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine($"********************************** UNHANDLED EXCEPTION! Details: {e.Message}");
-            }
+            await _transactionService.AddTransactionAndUpdateWallet(transaction, currentWallet, updateWallet);
 
-            Deskripsi = string.Empty;
-            TotalMoney = 0;
+            Withdraw.Description = string.Empty;
+            Withdraw.TotalMoney = 0;
         }
 
     }

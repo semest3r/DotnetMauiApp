@@ -9,32 +9,27 @@ namespace DotnetMauiApp.ViewModels
 {
     public partial class PemasukanPopUpViewModel : BaseViewModel
     {
-        readonly TransactionRepository _transactionRepository;
+        readonly TransactionService _transactionService;
         readonly WalletRepository _walletRepository;
 
-        public PemasukanPopUpViewModel(AuthService authService,
-                                       TransactionRepository transactionRepository,
-                                       WalletRepository walletRepository) : base(authService)
+        public PemasukanPopUpViewModel(TransactionService transactionService, WalletRepository walletRepository,AuthService authService) : base(authService)
         {
-            _transactionRepository = transactionRepository;
+            _transactionService = transactionService;
             _walletRepository = walletRepository;
         }
 
         [ObservableProperty]
-        string description;
-
-        [ObservableProperty]
-        double totalMoney;
+        Deposit deposit;
 
         [RelayCommand]
         async Task AddPemasukan()
         {
-            if (string.IsNullOrEmpty(Description))
+            if (string.IsNullOrEmpty(Deposit.Description))
             {
                 // return validation error
                 return;
             }
-            if (double.IsNaN(TotalMoney))
+            if (double.IsNaN(Deposit.TotalMoney))
             {
                 // return validation error
                 return;
@@ -42,36 +37,29 @@ namespace DotnetMauiApp.ViewModels
 
             var walletId = await _authService.GetCurrentWalletId();
             var currentWallet = await _walletRepository.GetWalletById(walletId);
-            var currentTotalMoney = currentWallet.TotalMoney + TotalMoney;
+            var currentTotalMoney = currentWallet.TotalMoney + Deposit.TotalMoney;
+
             var transaction = new Transaction
             {
-                Description = Description,
-                TotalMoney = TotalMoney,
-                CurrrentTotalMoney = TotalMoney,
+                Description = Deposit.Description,
+                TotalMoney = Deposit.TotalMoney,
+                CurrrentTotalMoney = currentTotalMoney,
                 CreatedAt = DateTime.Now,
                 TypeTransaction = "In",
-                WalletId = walletId,
+                WalletId = currentWallet.Id,
             };
 
             var updateWallet = new Wallet
             {
                 Id = currentWallet.Id,
                 Name = currentWallet.Name,
-                TotalMoney = currentTotalMoney,
+                TotalMoney = currentWallet.TotalMoney - Deposit.TotalMoney,
             };
 
-            try
-            {
-                await _transactionRepository.AddTransaction(transaction);
-                await _walletRepository.UpdateWallet(currentWallet, updateWallet);
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine($"********************************** UNHANDLED EXCEPTION! Details: {e.Message}");
-            }
+            await _transactionService.AddTransactionAndUpdateWallet(transaction, currentWallet, updateWallet);
 
-            Description = string.Empty;
-            TotalMoney = 0;
+            Deposit.Description = string.Empty;
+            Deposit.TotalMoney = 0;
         }
     }
 }

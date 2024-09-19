@@ -7,7 +7,6 @@ namespace DotnetMauiApp
     {
         public AppShell()
         {
-            Preferences.Clear();
             InitializeComponent();
             RegisterRoute();
         }

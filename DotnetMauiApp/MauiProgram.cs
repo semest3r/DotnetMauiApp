@@ -28,6 +28,7 @@ namespace DotnetMauiApp
 
             //Services
             builder.Services.AddTransient<AuthService>();
+            builder.Services.AddTransient<TransactionService>();
 
             //Page
             builder.Services.AddTransient<OnBoardingPage>();

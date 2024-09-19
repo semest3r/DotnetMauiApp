@@ -19,7 +19,7 @@
                             StrokeThickness="0" 
                             StrokeShape="RoundRectangle 8,8,8,8">
                         <VerticalStackLayout Padding="16">
-                        <Label Text="Pemasukan" FontSize="16"
+                        <Label Text="Deposit" FontSize="16"
                        HorizontalOptions="Center"/>
                         <Label Text="{Binding TotalPemasukan, StringFormat='Rp. {0:N0}'}"
                        HorizontalOptions="Center"/>
@@ -31,7 +31,7 @@
                             StrokeShape="RoundRectangle 8,8,8,8">
                         <VerticalStackLayout Grid.Column="1"
                                      Padding="16">
-                            <Label Text="Pengeluaran" 
+                            <Label Text="Withdrawal" 
                            FontSize="16"
                            HorizontalOptions="Center"/>
                             <Label Text="{Binding TotalPengeluaran, StringFormat='Rp. {0:N0}'}" 

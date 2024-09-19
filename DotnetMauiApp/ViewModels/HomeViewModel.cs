@@ -6,6 +6,7 @@ using DotnetMauiApp.Repositories;
 using DotnetMauiApp.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 
 
 namespace DotnetMauiApp.ViewModels
@@ -28,6 +29,7 @@ namespace DotnetMauiApp.ViewModels
             Wallets = [];
             CurrentWallet();
             AllWallets();
+            RecentTransaksi();
         }
 
         [ObservableProperty]
@@ -50,10 +52,12 @@ namespace DotnetMauiApp.ViewModels
             var wallet = await _walletRepository.GetWalletById(walletId);
             SelectedWallet = wallet;
         }
-        partial void OnSelectedWalletChanged(Wallet value)
+        partial void OnSelectedWalletChanged(Wallet? oldValue, Wallet newValue)
         {
-            Preferences.Set("wallet", SelectedWallet.Id);
-            RecentTransaksi();
+            if(newValue != null)
+            {
+                Preferences.Default.Set("wallet", newValue.Id);
+            }
         }
 
         [ObservableProperty]
@@ -89,9 +93,9 @@ namespace DotnetMauiApp.ViewModels
         {
             IsBusy = true;
 
+            RecentTransaksi();
             AllWallets();
             CurrentWallet();
-            RecentTransaksi();
 
             IsBusy = false;
         }
