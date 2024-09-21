@@ -77,5 +77,19 @@ namespace DotnetMauiApp.Services
                 System.Diagnostics.Debug.WriteLine($"********************************** UNHANDLED EXCEPTION! Details: {e.Message}");
             }
         }
+
+        public async Task DeleteTransactionAndUpdateWallet(Transaction transaction, Wallet wallet)
+        {
+            await _transactionRepository.DeleteTransaction(transaction);
+            var updateWallet = new Wallet
+            {
+                Id = transaction.WalletId,
+                Name = wallet.Name,
+                TotalMoney = transaction.TypeTransaction == "In"
+                ? wallet.TotalMoney - transaction.TotalMoney
+                : wallet.TotalMoney + transaction.TotalMoney,
+            };
+            await _walletRepository.UpdateWallet(wallet, updateWallet);
+        }
     }
 }

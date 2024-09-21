@@ -13,28 +13,28 @@ namespace DotnetMauiApp.ViewModels
 {
     public partial class HomeViewModel : BaseViewModel
     {
-        readonly TransactionRepository _transaksiRepository;
+        readonly TransactionRepository _transactionRepository;
         readonly WalletRepository _walletRepository;
         readonly IPopupService _popupService;
 
         public HomeViewModel(AuthService authService,
-                             TransactionRepository transaksiRepository,
+                             TransactionRepository transactionRepository,
                              WalletRepository walletRepository,
                              IPopupService popupService) : base(authService)
         {
             _popupService = popupService;
-            _transaksiRepository = transaksiRepository;
+            _transactionRepository = transactionRepository;
             _walletRepository = walletRepository;
             RecentTransactionResource = [];
             Wallets = [];
-            CurrentWallet();
-            AllWallets();
-            RecentTransaksi();
+            SetSelectedWallet();
+            SetWallets();
+            SetRecentTransaction();
         }
 
         [ObservableProperty]
         ObservableCollection<Wallet> wallets;
-        public async void AllWallets()
+        public async void SetWallets()
         {
             var wallets = await _walletRepository.GetAllWallet();
             Wallets.Clear();
@@ -46,7 +46,7 @@ namespace DotnetMauiApp.ViewModels
 
         [ObservableProperty]
         Wallet selectedWallet;
-        public async void CurrentWallet()
+        public async void SetSelectedWallet()
         {
             var walletId = await _authService.GetCurrentWalletId();
             var wallet = await _walletRepository.GetWalletById(walletId);
@@ -57,30 +57,31 @@ namespace DotnetMauiApp.ViewModels
             if(newValue != null)
             {
                 Preferences.Default.Set("wallet", newValue.Id);
+                RefreshData();
             }
         }
 
         [ObservableProperty]
         ObservableCollection<Transaction> recentTransactionResource;
-        public async void RecentTransaksi()
+        public async void SetRecentTransaction()
         {
             var walletId = await _authService.GetCurrentWalletId();
-            var transaksiAll = await _transaksiRepository.GetRecentTransaction(walletId);
+            var transactions = await _transactionRepository.GetRecentTransaction(walletId);
             RecentTransactionResource.Clear();
-            foreach (var item in transaksiAll)
+            foreach (var item in transactions)
             {
                 RecentTransactionResource.Add(item);
             }
         }
 
         [RelayCommand]
-        async Task ShowAddPemasukanPopup()
+        async Task ShowAddDepositPopup()
         {
             await _popupService.ShowPopupAsync<PemasukanPopUpViewModel>();
         }
 
         [RelayCommand]
-        async Task ShowAddPengeluaranPopup()
+        async Task ShowAddWithdrawPopup()
         {
             await _popupService.ShowPopupAsync<PengeluaranPopUpViewModel>();
         }
@@ -92,11 +93,9 @@ namespace DotnetMauiApp.ViewModels
         void RefreshData()
         {
             IsBusy = true;
-
-            RecentTransaksi();
-            AllWallets();
-            CurrentWallet();
-
+            SetWallets();
+            SetSelectedWallet();
+            SetRecentTransaction();
             IsBusy = false;
         }
 

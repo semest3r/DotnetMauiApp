@@ -38,10 +38,10 @@
                             </VerticalStackLayout>
                             <Grid ColumnSpacing="10" ColumnDefinitions="*,*">
                                 <Button Text="Deposit" 
-                            Command="{Binding ShowAddPemasukanPopupCommand}"/>
+                                    Command="{Binding ShowAddDepositPopupCommand}"/>
                                 <Button Grid.Column="1"
-                            Text="Withdraw"
-                            Command="{Binding ShowAddPengeluaranPopupCommand}"/>
+                                    Text="Withdraw"
+                                    Command="{Binding ShowAddWithdrawPopupCommand}"/>   
                             </Grid>
                         </VerticalStackLayout>  
                 </Frame>

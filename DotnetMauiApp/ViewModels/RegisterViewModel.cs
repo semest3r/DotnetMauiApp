@@ -30,8 +30,18 @@ namespace DotnetMauiApp.ViewModels
 
             var createdWallet = await _walletRepository.AddWallet(wallet);
             Preferences.Default.Set("wallet", createdWallet);
-            WalletName = string.Empty;
+            ClearForm();
+            await RedirectToHome();
+        }
+
+        async Task RedirectToHome()
+        {
             await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+        }
+
+        void ClearForm()
+        {
+            WalletName = string.Empty;
         }
     }
 }

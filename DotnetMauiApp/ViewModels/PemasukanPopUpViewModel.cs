@@ -58,6 +58,10 @@ namespace DotnetMauiApp.ViewModels
 
             await _transactionService.AddTransactionAndUpdateWallet(transaction, currentWallet, updateWallet);
 
+        }
+
+        void ClearForm()
+        {
             Deposit.Description = string.Empty;
             Deposit.TotalMoney = 0;
         }
